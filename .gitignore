@@ -2,4 +2,4 @@
 !.gitignore
 !/modules
 /modules/*
-!/modules/my_module
+!/modules/mymodule
