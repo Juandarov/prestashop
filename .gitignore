@@ -3,3 +3,5 @@
 !/modules
 /modules/*
 !/modules/mymodule
+!/modules/lastproduct
+!/modules/moduleBlog
