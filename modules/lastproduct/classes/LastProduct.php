@@ -2,12 +2,12 @@
 namespace
 
 {
-    class MyModule extends Module
+    class LastProduct extends Module
     {
 
         public function __construct()
         {
-            $this->name = 'mymodule';
+            $this->name = 'lastproduct';
             $this->tab = 'front_office_features';
             $this->version = '1.0.0';
             $this->author = 'Juan ROMERO';
@@ -17,19 +17,14 @@ namespace
 
             parent::__construct();
 
-            $this->displayName = $this->l('My module');
-            $this->description = $this->l('Description of my module.');
+            $this->displayName = $this->l('Last product');
+            $this->description = $this->l('Module to display last product added');
 
             $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
 
-            if (!Configuration::get('MyModule')) {
+            if (!Configuration::get('LastProduct')) {
                 $this->warning = $this->l('No name provided');
             }
-        }
-
-        public function installDB()
-        {
-
         }
 
         public function install()
@@ -41,7 +36,7 @@ namespace
             if (!parent::install()
                 || !$this->registerHook('leftColumn')
                 || !$this->registerHook('header')
-                || !Configuration::updateValue('MyModule', 'my friend')
+                || !Configuration::updateValue('LastProduct', 'my friend')
             ) {
                 return false;
             }
@@ -52,7 +47,7 @@ namespace
         public function uninstall()
         {
             if (!parent::uninstall()
-                || !Configuration::deleteByName('MyModule')
+                || !Configuration::deleteByName('LastProduct')
             ) {
                 return false;
             }
@@ -63,13 +58,13 @@ namespace
         {
             $output = null;
             if (Tools::isSubmit('submit'.$this->name)) {
-                $my_module_name = strval(Tools::getValue('MyModule'));
+                $my_module_name = strval(Tools::getValue('LastProduct'));
                 if (!$my_module_name
                     || empty($my_module_name)
                     || !Validate::isGenericName($my_module_name)) {
                     $output .= $this->displayError($this->l('Invalid Configuration value'));
                 } else {
-                    Configuration::updateValue('MyModule', $my_module_name);
+                    Configuration::updateValue('LastProduct', $my_module_name);
                     $output .= $this->displayConfirmation($this->l('Settings updated'));
                 }
             }
@@ -90,7 +85,7 @@ namespace
                     array(
                         'type' => 'text',
                         'label' => $this->l('Configuration value'),
-                        'name' => 'MyModule',
+                        'name' => 'LastProduct',
                         'size' => 20,
                         'required' => true
                     )
@@ -132,21 +127,19 @@ namespace
             );
 
             // Load current value
-            $helper->fields_value['MyModule'] = Configuration::get('MyModule');
+            $helper->fields_value['LastProduct'] = Configuration::get('LastProduct');
             return $helper->generateForm($fields_form);
         }
 
         public function hookDisplayLeftColumn($params)
         {
             $productObj = new Product();
-    		$products = count($productObj->getProducts(Context::getContext()->language->id, 0, 0, 'id_product', 'DESC', false, true));
             $last_products = $productObj->getProducts(Context::getContext()->language->id, 0, 0, 'id_product', 'DESC', false, true)[0];
 
             $this->context->smarty->assign(
                 array(
-                    'my_module_name' => Configuration::get('MyModule'),
+                    'my_module_name' => Configuration::get('LastProduct'),
                     'my_module_link' => $this->context->link->getModuleLink('mymodule', 'display'),
-                    'my_products_quantities' => $products,
                     'my_last_products' => $last_products['name']
                 )
             );
@@ -160,7 +153,7 @@ namespace
 
         public function hookDisplayHeader()
         {
-            $this->context->controller->addCSS($this->_path.'css/mymodule.css', 'all');
+            $this->context->controller->addCSS($this->_path.'css/lastproduct.css', 'all');
         }
     }
 }
